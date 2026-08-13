@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>New Tab</title>
+<style>
+  :root {
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: radial-gradient(circle at 50% 20%, #26282c 0%, #1b1c1f 60%);
+    color: #e8eaed;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .wrap {
+    width: 100%;
+    max-width: 560px;
+    padding: 24px;
+    text-align: center;
+  }
+  .logo {
+    font-size: 40px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-bottom: 28px;
+    background: linear-gradient(135deg, #8ab4f8, #c58af9);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #26282c;
+    border: 1px solid #3c3d40;
+    border-radius: 24px;
+    padding: 10px 18px;
+    transition: border-color 0.15s ease;
+  }
+  form:focus-within {
+    border-color: #8ab4f8;
+  }
+  form svg {
+    flex: 0 0 auto;
+    color: #9aa0a6;
+  }
+  input {
+    flex: 1 1 auto;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #e8eaed;
+    font-size: 15px;
+  }
+  input::placeholder {
+    color: #9aa0a6;
+  }
+  .shortcuts {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 34px;
+    flex-wrap: wrap;
+  }
+  .shortcut {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 72px;
+    color: #e8eaed;
+    text-decoration: none;
+  }
+  .shortcut .icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #303134;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .shortcut span.label {
+    font-size: 11.5px;
+    color: #9aa0a6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 72px;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="logo">ElectronBrowser</div>
+    <form id="search-form">
+      <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="search-input" type="text" placeholder="Search Google or type a URL" autofocus autocomplete="off" spellcheck="false" />
+    </form>
+
+    <div class="shortcuts">
+      <a class="shortcut" href="https://www.google.com"><span class="icon">G</span><span class="label">Google</span></a>
+      <a class="shortcut" href="https://www.wikipedia.org"><span class="icon">W</span><span class="label">Wikipedia</span></a>
+      <a class="shortcut" href="https://www.github.com"><span class="icon">Gh</span><span class="label">GitHub</span></a>
+      <a class="shortcut" href="https://duckduckgo.com"><span class="icon">D</span><span class="label">DuckDuckGo</span></a>
+      <a class="shortcut" href="https://news.ycombinator.com"><span class="icon">Y</span><span class="label">HN</span></a>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      function looksLikeUrl(text) {
+        if (/\s/.test(text)) return false;
+        if (/^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(text)) return true;
+        if (/^localhost(:\d+)?(\/.*)?$/i.test(text)) return true;
+        if (/^(\d{1,3}\.){3}\d{1,3}(:\d+)?(\/.*)?$/.test(text)) return true;
+        return /^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[^\s]*)?$/.test(text);
+      }
+
+      function resolve(text) {
+        const trimmed = text.trim();
+        if (!trimmed) return null;
+        if (/^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(trimmed)) return trimmed;
+        if (looksLikeUrl(trimmed)) return `https://${trimmed}`;
+        return `https://www.google.com/search?q=${encodeURIComponent(trimmed)}`;
+      }
+
+      const form = document.getElementById('search-form');
+      const input = document.getElementById('search-input');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const url = resolve(input.value);
+        if (url) window.location.href = url;
+      });
+    })();
+  </script>
+</body>
+</html>

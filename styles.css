@@ -1,0 +1,322 @@
+:root {
+  --bg-titlebar: #202124;
+  --bg-toolbar: #292a2d;
+  --bg-app: #1b1c1f;
+  --bg-tab: #303134;
+  --bg-tab-active: #1b1c1f;
+  --bg-tab-hover: #3a3b3e;
+  --bg-input: #202124;
+  --bg-input-focus: #131416;
+  --border-subtle: #3c3d40;
+  --text-primary: #e8eaed;
+  --text-secondary: #9aa0a6;
+  --accent: #8ab4f8;
+  --danger: #f28b82;
+  --radius-tab: 10px;
+  --titlebar-height: 40px;
+  --toolbar-height: 46px;
+  font-size: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  user-select: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Titlebar + tab strip                                                    */
+/* ---------------------------------------------------------------------- */
+
+#titlebar {
+  height: var(--titlebar-height);
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-end;
+  background: var(--bg-titlebar);
+  -webkit-app-region: drag;
+  padding-top: 6px;
+}
+
+#tab-strip-wrap {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-left: 8px;
+  -webkit-app-region: no-drag;
+}
+
+#tab-strip {
+  display: flex;
+  align-items: flex-end;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  height: 34px;
+}
+#tab-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 110px;
+  max-width: 220px;
+  width: 200px;
+  flex: 1 1 200px;
+  height: 34px;
+  padding: 0 10px;
+  margin-right: 2px;
+  border-radius: var(--radius-tab) var(--radius-tab) 0 0;
+  background: var(--bg-tab);
+  color: var(--text-secondary);
+  cursor: default;
+  position: relative;
+  transition: background-color 0.12s ease;
+}
+
+.tab:hover {
+  background: var(--bg-tab-hover);
+}
+
+.tab.active {
+  background: var(--bg-tab-active);
+  color: var(--text-primary);
+}
+
+.tab-favicon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  border-radius: 3px;
+}
+
+.tab-favicon.loading {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.tab-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12.5px;
+}
+
+.tab-close {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--text-secondary);
+  opacity: 0;
+  transition: opacity 0.1s ease, background-color 0.1s ease;
+}
+
+.tab:hover .tab-close,
+.tab.active .tab-close {
+  opacity: 1;
+}
+
+.tab-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+}
+
+#new-tab-btn {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  margin-left: 2px;
+  margin-bottom: 2px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+#new-tab-btn:hover {
+  background: var(--bg-tab-hover);
+  color: var(--text-primary);
+}
+
+#drag-spacer {
+  flex: 1 1 auto;
+  height: 100%;
+  -webkit-app-region: drag;
+}
+
+#window-controls {
+  display: flex;
+  align-items: stretch;
+  height: var(--titlebar-height);
+  -webkit-app-region: no-drag;
+}
+
+.win-btn {
+  width: 46px;
+  height: var(--titlebar-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.win-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.win-btn-close:hover {
+  background: #e81123;
+  color: #fff;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Toolbar                                                                  */
+/* ---------------------------------------------------------------------- */
+
+#toolbar {
+  flex: 0 0 auto;
+  height: var(--toolbar-height);
+  background: var(--bg-toolbar);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 10px;
+}
+
+.nav-btn {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.nav-btn:disabled {
+  color: #55565a;
+  cursor: default;
+}
+
+.nav-btn.active-toggle {
+  color: var(--accent);
+}
+
+#address-bar-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  margin: 0 6px;
+  border-radius: 16px;
+  background: var(--bg-input);
+  border: 1px solid transparent;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+#address-bar-wrap:focus-within {
+  background: var(--bg-input-focus);
+  border-color: var(--accent);
+}
+
+#security-icon {
+  flex: 0 0 auto;
+  display: flex;
+  color: var(--text-secondary);
+}
+
+#address-bar {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 13.5px;
+  user-select: text;
+}
+
+#address-bar::placeholder {
+  color: var(--text-secondary);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Webviews                                                                 */
+/* ---------------------------------------------------------------------- */
+
+#webview-container {
+  flex: 1 1 auto;
+  position: relative;
+  min-height: 0;
+  background: #ffffff;
+}
+
+.browser-webview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: inline-flex;
+}
+
+.browser-webview.hidden-tab {
+  display: none;
+}
